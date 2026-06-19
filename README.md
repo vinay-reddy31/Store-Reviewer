@@ -69,9 +69,9 @@ npm run dev                 # starts the app on http://localhost:5173
 
 | Role           | Email                    | Password     |
 | -------------- | ------------------------ | ------------ |
-| Administrator  | admin@storerating.com    | Admin@12345  |
-| Normal User    | user@storerating.com     | User@12345   |
-| Store Owner    | owner@storerating.com    | Owner@12345  |
+| Administrator  | admin@storerating.com    | Admin@123  |
+| Normal User    | user@storerating.com     | User@123   |
+| Store Owner    | owner@storerating.com    | Owner@123  |
 
 ## Roles & Features
 

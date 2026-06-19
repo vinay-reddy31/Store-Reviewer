@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../../api/client';
 import DataTable from '../../components/DataTable';
 import StarRating from '../../components/StarRating';
+import { IconPlus, IconSearch } from '../../components/Icons';
 
 export default function AdminStores() {
   const [stores, setStores] = useState([]);
@@ -51,25 +52,40 @@ export default function AdminStores() {
   return (
     <div className="page">
       <div className="page-header">
-        <h1>Stores</h1>
+        <div className="page-title">
+          <h1>Stores</h1>
+          <p>Every store registered on the platform and its overall rating.</p>
+        </div>
         <Link to="/admin/stores/new" className="btn btn-primary">
-          + Add Store
+          <IconPlus size={16} /> Add Store
         </Link>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="filters">
-        <input name="name" placeholder="Filter by name" value={filters.name} onChange={handleFilter} />
-        <input
-          name="address"
-          placeholder="Filter by address"
-          value={filters.address}
-          onChange={handleFilter}
-        />
+        <span className="search-field">
+          <IconSearch size={16} />
+          <input name="name" placeholder="Filter by name" value={filters.name} onChange={handleFilter} />
+        </span>
+        <span className="search-field">
+          <IconSearch size={16} />
+          <input
+            name="address"
+            placeholder="Filter by address"
+            value={filters.address}
+            onChange={handleFilter}
+          />
+        </span>
       </div>
 
-      {loading ? <p>Loading...</p> : <DataTable columns={columns} rows={stores} initialSort={{ key: 'name', dir: 'asc' }} />}
+      {loading ? (
+        <div className="loading-wrap">
+          <span className="loader" /> Loading stores…
+        </div>
+      ) : (
+        <DataTable columns={columns} rows={stores} initialSort={{ key: 'name', dir: 'asc' }} />
+      )}
     </div>
   );
 }

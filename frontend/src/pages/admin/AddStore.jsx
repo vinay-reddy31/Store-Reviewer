@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../../api/client';
 import { validateEmail, validateAddress } from '../../utils/validation';
 
@@ -54,7 +54,11 @@ export default function AddStore() {
 
   return (
     <div className="page">
-      <h1>Add Store</h1>
+      <Link to="/admin/stores" className="back-link">← Back to stores</Link>
+      <div className="page-title" style={{ marginBottom: '1.25rem' }}>
+        <h1>Add Store</h1>
+        <p>Register a new store and optionally assign an owner.</p>
+      </div>
       <div className="card form-card">
         {serverError && <div className="alert alert-error">{serverError}</div>}
         <form onSubmit={handleSubmit} noValidate>

@@ -1,11 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { IconStar, IconLogout } from './Icons';
 
 const ROLE_LABEL = {
   admin: 'System Administrator',
   user: 'Normal User',
   owner: 'Store Owner',
 };
+
+function initials(name = '') {
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0] || '') + (parts[1]?.[0] || '')).toUpperCase() || 'U';
+}
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -20,24 +26,36 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">⭐ Store Rating Platform</div>
+      <Link to="/" className="brand">
+        <span className="brand-mark">
+          <IconStar size={18} />
+        </span>
+        Store Rating
+      </Link>
+
       <div className="navbar-links">
         {user.role === 'admin' && (
           <>
-            <Link to="/admin">Dashboard</Link>
-            <Link to="/admin/users">Users</Link>
-            <Link to="/admin/stores">Stores</Link>
+            <NavLink to="/admin" end>Dashboard</NavLink>
+            <NavLink to="/admin/users">Users</NavLink>
+            <NavLink to="/admin/stores">Stores</NavLink>
           </>
         )}
-        {user.role === 'user' && <Link to="/stores">Stores</Link>}
-        {user.role === 'owner' && <Link to="/owner">Dashboard</Link>}
-        <Link to="/account/password">Change Password</Link>
+        {user.role === 'user' && <NavLink to="/stores">Stores</NavLink>}
+        {user.role === 'owner' && <NavLink to="/owner" end>Dashboard</NavLink>}
+        <NavLink to="/account/password">Change Password</NavLink>
       </div>
+
       <div className="navbar-user">
-        <span className="navbar-role">{ROLE_LABEL[user.role]}</span>
-        <span className="navbar-email">{user.email}</span>
+        <div className="user-chip">
+          <span className="avatar">{initials(user.name)}</span>
+          <span className="user-meta">
+            <span className="u-role">{ROLE_LABEL[user.role]}</span>
+            <span className="u-email">{user.email}</span>
+          </span>
+        </div>
         <button className="btn btn-secondary btn-sm" onClick={handleLogout}>
-          Logout
+          <IconLogout size={16} /> Logout
         </button>
       </div>
     </nav>

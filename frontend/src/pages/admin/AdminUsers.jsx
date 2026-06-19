@@ -2,8 +2,10 @@ import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/client';
 import DataTable from '../../components/DataTable';
+import { IconPlus, IconSearch } from '../../components/Icons';
 
 const ROLE_LABEL = { admin: 'Admin', user: 'Normal User', owner: 'Store Owner' };
+const ROLE_CLASS = { admin: 'role-admin', user: 'role-user', owner: 'role-owner' };
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -42,34 +44,50 @@ export default function AdminUsers() {
     },
     { key: 'email', label: 'Email' },
     { key: 'address', label: 'Address' },
-    { key: 'role', label: 'Role', render: (r) => ROLE_LABEL[r.role] || r.role },
+    {
+      key: 'role',
+      label: 'Role',
+      render: (r) => <span className={`badge-role ${ROLE_CLASS[r.role]}`}>{ROLE_LABEL[r.role]}</span>,
+    },
     {
       key: 'rating',
-      label: 'Rating (Owner)',
-      render: (r) => (r.role === 'owner' ? (r.rating ?? 'No ratings') : '—'),
+      label: 'Owner Rating',
+      render: (r) => (r.role === 'owner' ? (r.rating ?? '—') : '—'),
     },
   ];
 
   return (
     <div className="page">
       <div className="page-header">
-        <h1>Users</h1>
+        <div className="page-title">
+          <h1>Users</h1>
+          <p>Manage all administrators, normal users and store owners.</p>
+        </div>
         <Link to="/admin/users/new" className="btn btn-primary">
-          + Add User
+          <IconPlus size={16} /> Add User
         </Link>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="filters">
-        <input name="name" placeholder="Filter by name" value={filters.name} onChange={handleFilter} />
-        <input name="email" placeholder="Filter by email" value={filters.email} onChange={handleFilter} />
-        <input
-          name="address"
-          placeholder="Filter by address"
-          value={filters.address}
-          onChange={handleFilter}
-        />
+        <span className="search-field">
+          <IconSearch size={16} />
+          <input name="name" placeholder="Filter by name" value={filters.name} onChange={handleFilter} />
+        </span>
+        <span className="search-field">
+          <IconSearch size={16} />
+          <input name="email" placeholder="Filter by email" value={filters.email} onChange={handleFilter} />
+        </span>
+        <span className="search-field">
+          <IconSearch size={16} />
+          <input
+            name="address"
+            placeholder="Filter by address"
+            value={filters.address}
+            onChange={handleFilter}
+          />
+        </span>
         <select name="role" value={filters.role} onChange={handleFilter}>
           <option value="">All roles</option>
           <option value="admin">Admin</option>
@@ -78,7 +96,13 @@ export default function AdminUsers() {
         </select>
       </div>
 
-      {loading ? <p>Loading...</p> : <DataTable columns={columns} rows={users} initialSort={{ key: 'name', dir: 'asc' }} />}
+      {loading ? (
+        <div className="loading-wrap">
+          <span className="loader" /> Loading users…
+        </div>
+      ) : (
+        <DataTable columns={columns} rows={users} initialSort={{ key: 'name', dir: 'asc' }} />
+      )}
     </div>
   );
 }

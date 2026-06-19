@@ -36,7 +36,10 @@ export default function UpdatePassword() {
 
   return (
     <div className="page">
-      <h1>Change Password</h1>
+      <div className="page-title" style={{ marginBottom: '1.25rem' }}>
+        <h1>Change Password</h1>
+        <p>Keep your account secure with a strong, unique password.</p>
+      </div>
       <div className="card form-card">
         {error && <div className="alert alert-error">{error}</div>}
         {success && <div className="alert alert-success">{success}</div>}

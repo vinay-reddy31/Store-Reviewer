@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import api from '../../api/client';
 import StarRating from '../../components/StarRating';
+import { IconSearch, IconStore } from '../../components/Icons';
 
 export default function StoresList() {
   const [stores, setStores] = useState([]);
@@ -46,18 +47,30 @@ export default function StoresList() {
 
   return (
     <div className="page">
-      <h1>Stores</h1>
+      <div className="page-header">
+        <div className="page-title">
+          <h1>Discover stores</h1>
+          <p>Browse every registered store and share your rating.</p>
+        </div>
+      </div>
+
       {error && <div className="alert alert-error">{error}</div>}
       {message && <div className="alert alert-success">{message}</div>}
 
       <div className="filters">
-        <input name="name" placeholder="Search by name" value={search.name} onChange={handleSearch} />
-        <input
-          name="address"
-          placeholder="Search by address"
-          value={search.address}
-          onChange={handleSearch}
-        />
+        <span className="search-field">
+          <IconSearch size={16} />
+          <input name="name" placeholder="Search by name" value={search.name} onChange={handleSearch} />
+        </span>
+        <span className="search-field">
+          <IconSearch size={16} />
+          <input
+            name="address"
+            placeholder="Search by address"
+            value={search.address}
+            onChange={handleSearch}
+          />
+        </span>
         <select
           value={`${sort.sortBy}:${sort.order}`}
           onChange={(e) => {
@@ -65,23 +78,32 @@ export default function StoresList() {
             setSort({ sortBy, order });
           }}
         >
-          <option value="name:asc">Name (A-Z)</option>
-          <option value="name:desc">Name (Z-A)</option>
-          <option value="rating:desc">Rating (High-Low)</option>
-          <option value="rating:asc">Rating (Low-High)</option>
+          <option value="name:asc">Name (A–Z)</option>
+          <option value="name:desc">Name (Z–A)</option>
+          <option value="rating:desc">Rating (High–Low)</option>
+          <option value="rating:asc">Rating (Low–High)</option>
         </select>
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        <div className="loading-wrap">
+          <span className="loader" /> Loading stores…
+        </div>
       ) : stores.length === 0 ? (
-        <p>No stores found.</p>
+        <div className="card">
+          <p className="muted">No stores found.</p>
+        </div>
       ) : (
         <div className="store-grid">
           {stores.map((store) => (
             <div key={store.id} className="store-card">
-              <h3>{store.name}</h3>
-              <p className="store-address">{store.address}</p>
+              <div className="store-card-head">
+                <span className="store-logo">{store.name.charAt(0)}</span>
+                <h3>{store.name}</h3>
+              </div>
+              <p className="store-address">
+                <IconStore size={14} /> {store.address}
+              </p>
               <div className="store-rating-row">
                 <span className="label">Overall</span>
                 <StarRating value={Number(store.rating)} readOnly />
@@ -99,12 +121,9 @@ export default function StoresList() {
               </div>
               <div className="store-action">
                 <span className="label">
-                  {store.user_rating ? 'Modify your rating:' : 'Submit a rating:'}
+                  {store.user_rating ? 'Modify:' : 'Rate:'}
                 </span>
-                <StarRating
-                  value={store.user_rating || 0}
-                  onChange={(n) => rate(store.id, n)}
-                />
+                <StarRating value={store.user_rating || 0} onChange={(n) => rate(store.id, n)} />
               </div>
             </div>
           ))}

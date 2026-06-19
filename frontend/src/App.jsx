@@ -3,6 +3,7 @@ import { useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import UpdatePassword from './pages/UpdatePassword';
@@ -21,7 +22,8 @@ const HOME_BY_ROLE = { admin: '/admin', user: '/stores', owner: '/owner' };
 
 function Home() {
   const { user } = useAuth();
-  if (!user) return <Navigate to="/login" replace />;
+  // Guests see the marketing landing page; logged-in users go to their dashboard.
+  if (!user) return <Landing />;
   return <Navigate to={HOME_BY_ROLE[user.role] || '/login'} replace />;
 }
 

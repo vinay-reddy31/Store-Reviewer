@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import api from '../../api/client';
 import {
   validateName,
@@ -51,7 +51,11 @@ export default function AddUser() {
 
   return (
     <div className="page">
-      <h1>Add User</h1>
+      <Link to="/admin/users" className="back-link">← Back to users</Link>
+      <div className="page-title" style={{ marginBottom: '1.25rem' }}>
+        <h1>Add User</h1>
+        <p>Create an administrator, normal user or store owner.</p>
+      </div>
       <div className="card form-card">
         {serverError && <div className="alert alert-error">{serverError}</div>}
         <form onSubmit={handleSubmit} noValidate>
